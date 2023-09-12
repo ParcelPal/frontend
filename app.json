@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "ParcelPal",
+    "slug": "ParcelPal",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "ParcelPal"
+}
