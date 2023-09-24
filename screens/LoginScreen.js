@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Auth } from 'aws-amplify';
 import {
   View,
   Text,
@@ -7,20 +8,60 @@ import {
   StyleSheet,
   ImageBackground,
 } from 'react-native';
+import { useAuth } from '../AuthProvider';
 
-const LoginSignUpScreen = () => {
-  const [email, setEmail] = useState('');
+const LoginSignUpScreen = ({navigation}) => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
+  const [confirmUser, setConfirmUser] = useState(false);
+  const { login } = useAuth();
+  
+  async function handleLogin() {
+  if(confirmUser){
+    confirmSignUp();
+  }
+  else{
+  console.log('here')
+    try {
+    const user = await Auth.signIn(username, password);
+    login(user);
+    navigation.navigate('ProfileScreen', {user});
+    console.log(user)
+  } catch (error) {
+    console.log('error signing in', error);
+  }
+}
+}
 
-  const handleLogin = () => {
-    // Implement your login logic here
-  };
 
-  const handleSignUp = () => {
-    // Implement your sign-up logic here
-  };
-
+async function handleSignUp() {
+  
+  try {
+    const { user } = await Auth.signUp({
+      username,
+      password,
+      attributes: {
+        // other custom attributes 
+      },
+      autoSignIn: { // optional - enables auto sign in after user is confirmed
+        enabled: true,
+      }
+    });
+    setConfirmUser(true);
+    console.log(user);
+  } catch (error) {
+    console.log('error signing up:', error);
+  }
+}
+async function confirmSignUp() {
+  try {
+   const {user} = await Auth.confirmSignUp(username, password);
+    console.log(user)
+  } catch (error) {
+    console.log('error confirming sign up', error);
+  }
+}
   return (
     <ImageBackground
       source={require('./background-image.jpg')}
@@ -34,9 +75,9 @@ const LoginSignUpScreen = () => {
         </Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-          value={email}
+          placeholder="Username"
+          onChangeText={(text) => setUsername(text)}
+          value={username}
           keyboardType="email-address"
         />
         <TextInput
