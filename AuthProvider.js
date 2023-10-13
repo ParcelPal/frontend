@@ -15,6 +15,9 @@ export function AuthProvider({ children }) {
   // Function to log out the user
   const logout = () => {
     setUser(null);
+
+    console.log(children)
+    
   };
 
   return (

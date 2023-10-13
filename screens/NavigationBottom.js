@@ -1,43 +1,42 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Component } from 'react';
+import { React, Component } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileScreen from './Main';
-import Home from './Home';
+import Feed from './Home';
 import NotificationsComponent from './Notifications';
 import UserProfileComponent from './Profile';
+import AddTripForm from './AddTrip';
+import OrdersList from './Orders';
 
 const Tab = createBottomTabNavigator();
 
-export default function MyTabs() {
+export default function MyTabs(props) {
+  console.log(props);
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Feed"
       screenOptions={{
-        headerTintColor: 'white',
-        headerStyle: { backgroundColor: 'tomato' },
+        headerStyle: { backgroundColor: 'powderblue',  textStyle: { color: 'white' }},
         headerTitleStyle: { fontWeight: 'bold' },
-        headerShown: false,
-        headerTitleAlign: 'center',
-        headerTitle: '',
-        headerTransparent: true,
-        headerBackTitleVisible: false,
+        headerShown: true,
     }}
     >
       <Tab.Screen
-        name="Home"
-component={Home}
+    name="Home"
+component={Feed}
         options={{
-          tabBarLabel: 'Home',
+        title: '',
+          tabBarLabel: '',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+    <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
         name="Orders"
-component={NotificationsComponent}
+component={OrdersList}
         options={{
-          tabBarLabel: 'Orders',
+          tabBarLabel: '',
           tabBarIcon: ({ color, size }) => (
         <MaterialCommunityIcons name="cart-plus" color={color} size={size} />
           )
@@ -45,9 +44,9 @@ component={NotificationsComponent}
       />
       <Tab.Screen
         name="Trips"
-component={UserProfileComponent}
+component={AddTripForm }
         options={{
-          tabBarLabel: 'Trips',
+          tabBarLabel: '',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="wallet-travel" color={color} size={size} />
           ),
@@ -55,9 +54,9 @@ component={UserProfileComponent}
       />
       <Tab.Screen
         name="Notifications"
-component={UserProfileComponent}
+component={NotificationsComponent}
         options={{
-          tabBarLabel: 'Notifications',
+          tabBarLabel: '',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
@@ -67,7 +66,7 @@ component={UserProfileComponent}
         name="Profile"
 component={UserProfileComponent}
         options={{
-      tabBarLabel: 'Profile',
+      title: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),

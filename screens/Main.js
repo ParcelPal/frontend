@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import  MyTabs from './NavigationBottom';
-import { useAuth   } from '../AuthProvider';
+import { useAuth } from '../AuthProvider';
 
-const ProfileScreen = () => {
+const mainApp = (props) => {
   // Dummy user data (replace with actual data)
   // const user = {
   //   name: 'John Doe',
@@ -11,10 +11,10 @@ const ProfileScreen = () => {
   //   profilePicture: 'https://example.com/profile.jpg', // URL to the user's profile picture
   // };
   const { user, logout } = useAuth();
-
-console.log(user, "profile", user.attributes);
+console.log(props)
+// console.log(user, "profile", user.attributes);
   return (
-      <MyTabs />)
+<MyTabs />)
   //   <View style={styles.container}>
   //     {/* Profile Picture */}
   //     <Image
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default mainApp;

@@ -5,7 +5,12 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "71e8508e-4671-42f6-b0ff-a640f9e59753"
+      }
+    }
   },
   "name": "ParcelPal"
 }
