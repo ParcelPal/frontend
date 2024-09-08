@@ -50,7 +50,7 @@ console.log(user)
     // const {user, logout} = useAuth();
     const currentUser = user.attributes;
     var myHeaders = new Headers();
-myHeaders.append("x-api-key", "MTLEpOAep79Q3A3xOSXW78Y6xrUiuawQ1aiOV6kh");
+myHeaders.append("x-api-key", "NaMMdQcf4p3HQatPG0c3y8oAKh9NWCoY4JIsDqxw");
 myHeaders.append("Content-Type", "application/json");
 let totalPrice = (productData.price + productData.price*travelerComm*0.01 + productData.price*0.1).toFixed(2)
 // const totalValue = new AttributeValue();
@@ -83,7 +83,7 @@ var requestOptions = {
 };
 // productLoading(true); 
 setIsPlacingRequest(true);
-await fetch("https://lhudgv925k.execute-api.us-east-1.amazonaws.com/dev/pickuppackage-dev", requestOptions)
+await fetch("https://dh2dt51pfi.execute-api.ap-southeast-2.amazonaws.com/default/put_item", requestOptions)
 await setIsPlacingRequest(false);
 await setisOrderSuccess(true);
 // .then(response => response.text())

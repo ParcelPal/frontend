@@ -6,12 +6,13 @@ TextInput,
   ImageBackground,
   ActivityIndicator
 } from 'react-native';
+
 import { Button, Text, View } from 'react-native';
 import { Amplify, Auth, Hub } from 'aws-amplify';
 import { withOAuth } from "aws-amplify-react-native";
 import awsconfig from '../aws-exports';
 import { Storage } from 'aws-amplify';
-
+import { setProfileRoot } from '../index';
 const uploadToS3 = async (imageUri, key) => {
   try {
     const response = await Storage.put(key, imageUri, {
@@ -66,20 +67,23 @@ useEffect(()=>{
   console.log(props)
 },[]);
 const goToProfileScreen = (screen) => {
-  Navigation.push('2', {
-    component: {
-      name: 'ProfileScreen',
-      options: {
-        topBar: {
-          visible: false,
-          drawBehind: false,
-          title: {
-            text: "Profile",
-            color: "#121"
-          }
-        }}
-      },
-    });
+  // Navigation.push('1', {
+  //   component: {
+  //     name: 'ProfileScreen',
+  //     options: {
+  //       topBar: {
+  //         visible: false,
+  //         drawBehind: false,
+  //         title: {
+  //           text: "Profile",
+  //           color: "#121"
+  //         }
+  //       }}
+  //     },
+  //   });
+  console.log('profile root')
+  setProfileRoot();
+
   };
   
   async function handleLogin() {
@@ -156,11 +160,12 @@ async function confirmSignUp() {
 
   return (
     <ImageBackground
-  source={null}
+  source={require('./2018477.jpg')}
       style={styles.backgroundImage}
       resizeMode="cover" 
       position='relative'
     >
+
       <View style={styles.container}>
       {isloading && <ActivityIndicator size="large" color="#0000ff" />}
       {/* <Text>User: {oAuthUser ? JSON.stringify(oAuthUser.attributes) : 'None'}</Text>
@@ -181,7 +186,7 @@ async function confirmSignUp() {
         </>
       )}  */}
         <Text style={styles.headerText}>
-          {isSignUp ? 'Create Account' : 'Welcome to Air Meeds'}
+          {isSignUp ? 'Create Account' : 'AirMeeds'}
         </Text>
         {isSignUp && (<TextInput
           style={styles.input}
@@ -261,8 +266,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 0,
-backgroundColor: '#121',
-  },
+},
   headerText: {
     fontSize: 30,
     fontWeight: 'bold',

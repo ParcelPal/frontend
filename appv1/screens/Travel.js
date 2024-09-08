@@ -10,7 +10,7 @@ export function Travel() {
     const [user, setUser]=  useState([]);
     const fetchOrders = async(cities, user_sub)=>{
         var myHeaders = new Headers();
-        myHeaders.append("x-api-key", "MTLEpOAep79Q3A3xOSXW78Y6xrUiuawQ1aiOV6kh");
+        myHeaders.append("x-api-key", "PP1m6AB9UD11wBm7VuLJo5w8PdUieXIz6sDx1h7T");
         myHeaders.append("Content-Type", "application/json");
 
         var raw = JSON.stringify({
@@ -25,7 +25,7 @@ export function Travel() {
         redirect: 'follow'
         };
         console.log(requestOptions);
-        await fetch("https://mtmv7ikssh.execute-api.us-east-1.amazonaws.com/dev/order/{proxy+}", requestOptions)
+        await fetch("https://ugri233h45.execute-api.ap-southeast-2.amazonaws.com/default/index_query", requestOptions)
         .then(response => response.text())
         .then(result => setOrders(JSON.parse(result)))
         .catch(error => console.log('error', error));

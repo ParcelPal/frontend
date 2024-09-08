@@ -1,0 +1,45 @@
+type User @model 
+  @auth(rules: [
+    { allow: public, provider: apiKey, operations: [read, create, update, delete] }
+  ]) {
+  id: ID! @primaryKey
+  username: String!
+  email: String
+  firstName: String
+  lastName: String
+  userConversations: [UserConversations] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Conversation @model 
+  @auth(rules: [
+    { allow: public, provider: apiKey, operations: [read, create, update, delete] }
+  ]) {
+  id: ID! @primaryKey
+  name: String
+  userConversations: [UserConversations] @hasMany(indexName: "byConversation", fields: ["id"])
+  messages: [Message] @hasMany(indexName: "byConversation", fields: ["id"])
+}
+
+type UserConversations @model 
+  @auth(rules: [
+    { allow: public, provider: apiKey, operations: [read, create, update, delete] }
+  ]) {
+  id: ID! @primaryKey
+  userId: ID! @index(name: "byUser")
+  conversationId: ID! @index(name: "byConversation")
+  user: User @belongsTo(fields: ["userId"])
+  conversation: Conversation @belongsTo(fields: ["conversationId"])
+}
+
+type Message @model 
+  @auth(rules: [
+    { allow: owner, operations: [create, update, delete, read] },
+    { allow: public, provider: apiKey, operations: [read, create] }
+  ]) {
+  id: ID! @primaryKey
+  content: String!
+  createdAt: AWSDateTime!
+  owner: String!
+  conversationID: ID! @index(name: "byConversation", sortKeyFields: ["createdAt"])
+  isRead: Boolean
+}

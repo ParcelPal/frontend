@@ -15,22 +15,23 @@ import UpdateUser from './UpdateUser';
 import Modal from 'react-native-modal';
 import { Amplify, Auth, Hub } from 'aws-amplify';
 import awsconfig from '../aws-exports';
+import { setLoginRoot } from '../index';
 
 const goToProfileScreen = (props) => {
   console.log(props);
-  Navigation.push('1', {
-    component: {
-      name: 'frontendrn',
-      options: {
-        topBar: {
-          title: {
-            text: 'Settings',
-          },
-        },
-      },
-    },
-  });
-  
+  // Navigation.push('1', {
+  //   component: {
+  //     name: 'frontendrn',
+  //     options: {
+  //       topBar: {
+  //         title: {
+  //           text: 'Settings',
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+  setLoginRoot();
 };
   
 Amplify.configure(awsconfig);

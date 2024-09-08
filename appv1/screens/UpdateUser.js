@@ -220,12 +220,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 0,
-backgroundColor: 'teal',
+backgroundColor: '#007BFF',
   },
   headerText: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'teal',
+    color: '#000',
     marginBottom: 30,
   },
   input: {

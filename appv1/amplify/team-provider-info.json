@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-airmeeds-dev-0970c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::891377404086:role/amplify-airmeeds-dev-0970c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::891377404086:role/amplify-airmeeds-dev-0970c-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-airmeeds-dev-0970c-deployment",
+      "UnauthRoleName": "amplify-airmeeds-dev-0970c-unauthRole",
+      "StackName": "amplify-airmeeds-dev-0970c",
+      "StackId": "arn:aws:cloudformation:us-east-1:891377404086:stack/amplify-airmeeds-dev-0970c/77161760-6545-11ef-a571-0e9a8e1bb979",
+      "AmplifyAppId": "d3oglajfziglgw"
+    },
+    "categories": {
+      "auth": {
+        "airmeeds15e1be3c": {}
+      },
+      "api": {
+        "airmeeds": {}
+      }
+    }
+  }
+}

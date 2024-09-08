@@ -82,17 +82,18 @@ console.log(useAuth())
     fontWeight: 'bold',
     marginBottom: 16,
   }}>Upto $400 rewards on every travel 
-  Shop Products Internationally</Text>
+  Shop Products Internationally </Text>
       <Text>Special Offers</Text>
       <Carousel
-        data={staticOffers}
-        renderItem={renderItem}
-        sliderWidth={400}
-        itemWidth={400}
-        loop
-        autoplay
-        autoplayInterval={3000}
-      />
+          data={staticOffers}
+          renderItem={renderItem}
+          sliderWidth={400}
+          itemWidth={300}
+          loop
+          autoplay
+          autoplayInterval={3000}
+        />
+        <Text>Recent Orders Placed by Users:</Text>
       </View> : <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
     <CreateOrder setOrder={setOrder}/>
       {/* {!isOrder && (
@@ -118,6 +119,7 @@ console.log(useAuth())
         </ScrollView>
       )} */}
 {/* <Button onPress={() => {}} title="Add to order"> */}
+  
     </View>
   );
 }
@@ -133,16 +135,21 @@ function SettingsScreen() {
 
 // console.log('createOrder', createOrder)
 const Home = () => {
-  return (<Tab.Navigator
+  return (
+    <SafeAreaView style={styles.container}>
+  <Tab.Navigator
       screenOptions={{
-        tabBarLabelStyle: { fontSize: 11, fontWeight: 700 },
-        tabBarStyle: { backgroundColor: "teal" }
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '700', color: 'white' },  // Set the label color to white
+        tabBarStyle: { backgroundColor: '#000' },  // Background color for the tab bar
+        tabBarIndicatorStyle: { backgroundColor: 'white' },
+        swipeEnabled: false  // Optional: Indicator color if you want a different one
       }}
     >
       <Tab.Screen name="Order" component={HomeScreen} />
       <Tab.Screen name="Travel" component={Travel} />
       <Tab.Screen name="Ship" component={ SettingsScreen } />
     </Tab.Navigator>
+    </SafeAreaView>
   );
 };
 
@@ -152,9 +159,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    paddingBottom:100
   },
   button: {
-    backgroundColor: 'teal',
+    backgroundColor: '#007BFF',
     width: '90%',
     height: 50,
     justifyContent: 'center',
@@ -186,7 +194,7 @@ const styles = StyleSheet.create({
   offerCard: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'teal',
+    backgroundColor: '#FFF',
     borderRadius: 10,
     padding: 10,
     margin: 10,
@@ -194,7 +202,7 @@ const styles = StyleSheet.create({
   createButton: {
     margin: 10,
     padding: 10,
-    backgroundColor: 'teal',
+    backgroundColor: '#007BFF',
     borderRadius: 10,
     width: "100%",
     height: "100%",

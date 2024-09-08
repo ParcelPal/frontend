@@ -1,22 +1,42 @@
 import React from 'react';  // Import React
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';  // Fix import statement
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'; 
 import ProfileScreen from './Main';
 import Feed from './Home';
 import NotificationsComponent from './Notifications';
 import UserProfileComponent from './Profile';
 import AddTripForm from './AddTrip';
 import OrdersList from './Orders';
-
+import { View } from 'react-native';
+import syncUsers from './util';
+import { useEffect } from 'react';
 const Tab = createBottomTabNavigator();
 
 export default function MyTabs(props) {
   console.log(props);
+  useEffect(() => { 
+    syncUsers(); // Sync Cognito user with Firebase on app load
+  }, []);
   return (
     <Tab.Navigator
       initialRouteName="Feed"
       screenOptions={{
-        // Additional screen options
+        headerShown: false,
+        tabBarShowLabel: false,  // Hides labels for a cleaner look
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 20,
+          left: 20,
+          right: 20,
+          elevation: 5,
+          backgroundColor: '#ffffff',  // Change to your desired color
+          borderRadius: 15,
+          height: 70,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 10 },
+          shadowOpacity: 0.1,
+          shadowRadius: 3.5,
+        },
       }}
     >
       <Tab.Screen
@@ -25,9 +45,10 @@ export default function MyTabs(props) {
         options={{
           title: 'Home',
           tabBarLabel: 'Home',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <MaterialCommunityIcons name={focused ? "home" : "home-outline"} color={color} size={size} />
+            </View>
           ),
         }}
       />
@@ -36,8 +57,10 @@ export default function MyTabs(props) {
         component={OrdersList}
         options={{
           tabBarLabel: 'Orders',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="wallet" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <MaterialCommunityIcons name={focused ? "wallet" : "wallet-outline"} color={color} size={size} />
+            </View>
           ),
         }}
       />
@@ -46,8 +69,10 @@ export default function MyTabs(props) {
         component={AddTripForm}
         options={{
           tabBarLabel: 'Trips',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="wallet-travel" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <MaterialCommunityIcons name={focused ? "wallet-travel" : "wallet-travel"} color={color} size={size} />
+            </View>
           ),
         }}
       />
@@ -56,9 +81,12 @@ export default function MyTabs(props) {
         component={NotificationsComponent}
         options={{
           tabBarLabel: 'Chat',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="chat" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <MaterialCommunityIcons name={focused ? "chat" : "chat-outline"} color={color} size={size} />
+            </View>
           ),
+          // tabBarBadge: 3,  // Example badge for notifications
         }}
       />
       <Tab.Screen
@@ -66,8 +94,10 @@ export default function MyTabs(props) {
         component={UserProfileComponent}
         options={{
           title: 'Account',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <MaterialCommunityIcons name={focused ? "account" : "account-outline"} color={color} size={size} />
+            </View>
           ),
         }}
       />

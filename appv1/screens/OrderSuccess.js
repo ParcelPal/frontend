@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   products: {
-    backgroundColor: 'teal',
+    backgroundColor: '#007BFF',
     padding: 10,
     borderRadius: 5,
     marginTop: 5,

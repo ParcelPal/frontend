@@ -47,8 +47,8 @@ const CreateOrder = ({setOrder}) => {
   const scrapeUrl = async(url) => {
     
     console.log(url)
-    const username = 'anirudhp1';
-    const password = 'password1!!P';
+    const username = 'ecomscrape_g1KIQ';
+    const password = 'ecommerceScrape1~';
 
     const body = {
       'source': 'amazon',
@@ -66,6 +66,7 @@ const CreateOrder = ({setOrder}) => {
     try {
       setProductLoading(true);
       setIsFetching(false);
+      console.log(body);
       const response = await axios.post('https://realtime.oxylabs.io/v1/queries', body, {
         headers,
       });
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-    backgroundColor: 'teal',
+    backgroundColor: '#007BFF',
     width: '90%',
     height: 50,
     justifyContent: 'center',

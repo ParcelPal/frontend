@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "airmeeds",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authairmeeds15e1be3c",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

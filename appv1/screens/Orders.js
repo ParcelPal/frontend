@@ -61,10 +61,11 @@ useEffect(() => {
     // const {user, logout} = useAuth();
     const currentUser = user.attributes;
     var myHeaders = new Headers();
-    myHeaders.append("x-api-key", "MTLEpOAep79Q3A3xOSXW78Y6xrUiuawQ1aiOV6kh");
+    myHeaders.append("x-api-key", "NaMMdQcf4p3HQatPG0c3y8oAKh9NWCoY4JIsDqxw");
     myHeaders.append("Content-Type", "application/json");
     item['traveler'] = currentUser['sub'];
     item['request_status'] = 'pickedup';
+    item['bid'] = item.price;
     item.price = JSON.stringify(item.price);
     item.rating = JSON.stringify(item.rating);
 
@@ -78,14 +79,14 @@ useEffect(() => {
     };
     // productLoading(true); 
     setIsPlacingRequest(true);
-    await fetch("https://lhudgv925k.execute-api.us-east-1.amazonaws.com/dev/pickuppackage-dev", requestOptions)
+    await fetch("https://dh2dt51pfi.execute-api.ap-southeast-2.amazonaws.com/default/put_item", requestOptions)
     await setIsPlacingRequest(false);
     useEffect(()=>{},[orders]);
 
   }
 const fetchPickedUpOrders = async()=>{
   var myHeaders = new Headers();
-      myHeaders.append("x-api-key", "MTLEpOAep79Q3A3xOSXW78Y6xrUiuawQ1aiOV6kh");
+      myHeaders.append("x-api-key", "PP1m6AB9UD11wBm7VuLJo5w8PdUieXIz6sDx1h7T");
       myHeaders.append("Content-Type", "application/json");
       var raw = JSON.stringify({
         "traveler": userSub,
@@ -99,7 +100,7 @@ const fetchPickedUpOrders = async()=>{
         redirect: 'follow'
       };
       
-      const response = await fetch("https://mtmv7ikssh.execute-api.us-east-1.amazonaws.com/dev/order/{proxy+}", requestOptions)
+      const response = await fetch("https://ugri233h45.execute-api.ap-southeast-2.amazonaws.com/default/index_query", requestOptions)
       const result = await response.json();
       console.log(result)
       setPickedUp(result);
@@ -128,7 +129,9 @@ const fetchPickedUpOrders = async()=>{
         <Text>Delivery Date: {item.deliveryDate}</Text> 
         <Text>Order Status: {item.request_status}</Text> 
         <Text>Total Cost: {item.totalPrice}</Text>
-        {ordersFiltered ? <Button onPress={()=>pickUpRequest(item)}>Pick up Order</Button> : <Button>Cancer Order</Button>}
+        {ordersFiltered ? <Text>Current bid price is {item.bid?item.bid:item.totalPrice}</Text> : null}
+        {ordersFiltered? <TextInput style={styles.input} placeholder="Enter Your Bid Amount" />: null}
+        {ordersFiltered ? <Button onPress={()=>pickUpRequest(item)}>Offer Delivery</Button>: null}
         <Modal
           visible={isPlacingRequest}
           animationType="slide"
@@ -153,12 +156,12 @@ console.log(userSub,"f")
       }
       console.log(orders, userSub, 'fe')
       var myHeaders = new Headers();
-      myHeaders.append("x-api-key", "MTLEpOAep79Q3A3xOSXW78Y6xrUiuawQ1aiOV6kh");
+      myHeaders.append("x-api-key", "PP1m6AB9UD11wBm7VuLJo5w8PdUieXIz6sDx1h7T");
       myHeaders.append("Content-Type", "application/json");
       var raw = JSON.stringify({
         "sub": userSub
       });
-
+      console.log(raw)
       var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -166,7 +169,7 @@ console.log(userSub,"f")
         redirect: 'follow'
       };
       
-      const response = await fetch("https://mtmv7ikssh.execute-api.us-east-1.amazonaws.com/dev/order/{proxy+}", requestOptions)
+      const response = await fetch("https://ugri233h45.execute-api.ap-southeast-2.amazonaws.com/default/index_query", requestOptions)
       const result = await response.json();
       setOrders(result);
       setIsLoading(false);
@@ -179,7 +182,7 @@ console.log(userSub,"f")
       // Set loading state to false when the fetch is complete
     }};
 const OrdersPlaced = () => {
-  console.log(orders)
+  console.log("Hello", orders)
   return (
     
     isLoading ? (
@@ -207,7 +210,7 @@ const OrdersPlaced = () => {
         ListHeaderComponentStyle={{ padding: 16 }}
         ListFooterComponentStyle={{ padding: 16 }}
         ListEmptyComponentStyle={{ padding: 16 }}
-        data={orders? orders.filter((item)=>item.request_status == "requested"):null}
+        data={orders.length ? orders.filter((item)=>item.request_status == "requested"):null}
         keyExtractor={(item) => item.SNO}
         renderItem={renderOrderItem}
         />
@@ -285,12 +288,12 @@ const OrdersPickedUp = () => {
   return (
     ordersFiltered ? <OrdersPlaced /> : <Tab.Navigator
       screenOptions={{
-        tabBarLabelStyle: { fontSize: 11, fontWeight: 700 },
-        tabBarStyle: { backgroundColor: "teal" }
+        tabBarLabelStyle: { fontSize: 11, fontWeight: 700, color: "#fff" },
+        tabBarStyle: { backgroundColor: "#000" }
       }}
     >
       <Tab.Screen name="Orders Placed" component={OrdersPlaced} />
-      <Tab.Screen name="In Transit" component={OrdersInTransit} />
+      <Tab.Screen name="Order Offers" component={OrdersInTransit} />
       <Tab.Screen name="Picked Up" component={ OrdersPickedUp } />
     </Tab.Navigator>)
   ;

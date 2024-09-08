@@ -1,93 +1,77 @@
-// AddTripForm.js
-import { Amplify, Auth, Hub } from 'aws-amplify';
-
+import { Amplify, Auth } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, StyleSheet, FlatList, Alert } from 'react-native';
-import DatePicker from 'react-native-date-picker'
+import DatePicker from 'react-native-date-picker';
 import { useFocusEffect } from '@react-navigation/native';
-
+import awsconfig from '../aws-exports';
 import { Text } from 'react-native-paper';
+
+Amplify.configure(awsconfig);
 
 const AddTripForm = () => {
   const [destination, setDestination] = useState('');
   const [from, setFrom] = useState('');
   const [deliveryDate, setDeliveryDate] = useState(false);
   const [notes, setNotes] = useState('');
-  const [date, setDate] = useState(new Date())
-  const [open, setOpen] = useState(false)
-  const [addTrips, setAddTrips] = useState(false)
-  const [trips, setTrips] = useState([])
-  // const user = async()=>await Auth.currentAuthenticatedUser();
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [addTrips, setAddTrips] = useState(false);
+  const [trips, setTrips] = useState([]);
 
-  const handleAddTrip = async (trip) => {
+  const handleAddTrip = async () => {
     // Validate form fields before adding the trip
-    if (!destination || !deliveryDate) {
-      // Display an error or alert for incomplete form
-      Alert('Please input all fields')
+    if (!from || !destination || !deliveryDate) {
+      Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-    
-    let trips = [];
-    
-    let userTrip = {from: from, destination: destination, deliveryDate: date, notes: notes};
-    const user = await Auth.currentAuthenticatedUser();
-    if('custom:trips' in user.attributes){
-      trips = JSON.parse(user.attributes['custom:trips']);
+
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      let trips = user.attributes['custom:trips'] ? JSON.parse(user.attributes['custom:trips']) : [];
+      let userTrip = { from, destination, deliveryDate: date.toISOString(), notes };
+
       trips.push(userTrip);
+
+      await Auth.updateUserAttributes(user, { 'custom:trips': JSON.stringify(trips) });
+
+      // Update trips state
+      setTrips(trips);
+
+      // Clear form fields after adding the trip
+      setFrom('');
+      setDestination('');
+      setDeliveryDate(false);
+      setNotes('');
+      setAddTrips(false);
+
+      Alert.alert('Success', 'Trip added successfully!');
+    } catch (error) {
+      console.error('Error adding trip:', error);
+      Alert.alert('Error', 'Failed to add trip. Please try again.');
     }
-    else{
-      trips = [userTrip];
-    }
-    await Auth.updateUserAttributes(user, { 'custom:trips':  JSON.stringify(trips)});
-
-    // Create a new trip object
-    const newTrip = {
-      destination,
-      deliveryDate,
-      notes,
-    };
-
-    // Pass the new trip to the parent component or function
-    // onAddTrip(newTrip);
-
-    // Clear form fields after adding the trip
-    setDestination('');
-    setDeliveryDate('');
-    setNotes('');
   };
-  const fetchTrips = async () => {
-    const user = await Auth.currentAuthenticatedUser();
-    let trips_user = JSON.parse(user.attributes['custom:trips']);
-    setTrips(trips_user);
-  }
+
+  const loadAuthenticatedUser = async () => {
+    try {
+      const currentUser = await Auth.currentAuthenticatedUser();
+      const trips = currentUser.attributes['custom:trips'] ? JSON.parse(currentUser.attributes['custom:trips']) : [];
+      setTrips(trips);
+    } catch (error) {
+      console.error('Error loading authenticated user:', error);
+      Alert.alert('Error', 'Failed to load user. Please check your connection and try again.');
+    }
+  };
+
   useEffect(() => {
     // Load the current authenticated user when the component mounts
     loadAuthenticatedUser();
   }, []);
-  const loadAuthenticatedUser = async () => {
-    try {
-      const currentUser = await Auth.currentAuthenticatedUser();
-      setTrips(JSON.parse(currentUser.attributes['custom:trips']));
-      console.log(currentUser);
-    } catch (error) {
-      console.error('Error loading authenticated user:', error);
-    }
-  };
+
   useFocusEffect(
     React.useCallback(() => {
-      // Simulate an asynchronous operation (e.g., API call) with setTimeout
-      // fetchTrips();
-      // console.log(user);
-      console.log(trips);
-    loadAuthenticatedUser();
-
-      setAddTrips(false);
-      // if(user){
-      //   setAddTrips(true);
-      // }
-      // setTrips(JSON.parse(user.attributes?user.attributes['custom:trips']:null));
+      loadAuthenticatedUser();
       return () => {
-        // Clean up or perform actions when leaving Screen A
+        // Clean up if necessary
       };
     }, [])
   );
@@ -96,73 +80,72 @@ const AddTripForm = () => {
     <View style={styles.tripItem}>
       <Text>From: {item.from}</Text>
       <Text>Destination: {item.destination}</Text>
-      <Text>Delivery Date: {item.deliveryDate}</Text>
+      <Text>Delivery Date: {new Date(item.deliveryDate).toDateString()}</Text>
       <Text>Notes: {item.notes}</Text>
     </View>
   );
-  const setAddTripsToggle = () => {
-    setAddTrips(true);
-  }
+
   return (
-    !addTrips ? <View style={styles.container}>
-      <FlatList
-        data={trips}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderTripItem}
-        style={styles.tripList}
-      />
-      <Button title="Add Trip" onPress={setAddTripsToggle}/>
-    </View>:
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Travelling From"
-        value={from}
-        onChangeText={(text) => setFrom(text)}
-      />
+    !addTrips ? (
+      <View style={styles.container}>
+        <FlatList
+          data={trips}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderTripItem}
+          style={styles.tripList}
+        />
+        <Text style={styles.text}>Head to the travel tab on home screen to pick up orders based on your destinations</Text>
+        <Button title="Add Trip" onPress={() => setAddTrips(true)} />
+          
+      </View>
+    ) : (
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          placeholder="Travelling From"
+          value={from}
+          onChangeText={setFrom}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Destination"
-        value={destination}
-        onChangeText={(text) => setDestination(text)}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Destination"
+          value={destination}
+          onChangeText={setDestination}
+        />
 
-      <Button title="Pick Travel Date" onPress={() => setOpen(true)} />
-      <Text >{setDeliveryDate && ("Delivery Date : " + date.getMinutes() == (new Date()).getMinutes() ? "select" :date.toISOString())}</Text>
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Travel Date"
-        value={deliveryDate}
-        onChangeText={(text) => setDeliveryDate(text)}
-      /> */}
+        <Button title="Pick Travel Date" onPress={() => setOpen(true)} />
+        <Text>
+          {deliveryDate && ("Delivery Date : " + (date.getMinutes() === (new Date()).getMinutes() ? "select" : date.toISOString()))}
+        </Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Additional Notes"
-        multiline
-        numberOfLines={3}
-        value={notes}
-        onChangeText={(text) => setNotes(text)}
-      />
-      <DatePicker
+        <TextInput
+          style={styles.input}
+          placeholder="Additional Notes"
+          multiline
+          numberOfLines={3}
+          value={notes}
+          onChangeText={setNotes}
+        />
+        <DatePicker
           modal
           open={open}
           date={date}
           onConfirm={(date) => {
-            setOpen(false)
-            setDate(date)
-            console.log(date)
-            setDeliveryDate(true)
+            setOpen(false);
+            setDate(date);
+            setDeliveryDate(true);
           }}
           onCancel={() => {
-            setOpen(false)
+            setOpen(false);
           }}
         />
 
-      <Button title="Add Trip" onPress={handleAddTrip} />
-      <Button title="Cancel" onPress={() => setAddTrips(false)} />
-    </View>
+        <Button title="Add Trip" onPress={handleAddTrip} />
+        <Button title="Cancel" onPress={() => setAddTrips(false)} />
+          
+      </View>
+    )
   );
 };
 
@@ -170,6 +153,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    paddingBottom: 100,
   },
   input: {
     height: 40,
@@ -188,13 +172,16 @@ const styles = StyleSheet.create({
   tripList: {
     flex: 1,
     marginTop: 16,
-    marginBottom: 16,
     height: 200,
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
-  }
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 16,
+  },
 });
 
 export default AddTripForm;

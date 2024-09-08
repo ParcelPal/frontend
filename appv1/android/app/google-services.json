@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "615002303745",
+    "project_id": "airmeeds",
+    "storage_bucket": "airmeeds.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615002303745:android:96147bf72a509493707f00",
+        "android_client_info": {
+          "package_name": "com.application.airmeeds"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEVqcKEBkSoulpr__hg6hKxvR8t5uxG6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615002303745:android:54e140349e9d1ab7707f00",
+        "android_client_info": {
+          "package_name": "com.frontendrn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEVqcKEBkSoulpr__hg6hKxvR8t5uxG6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
